@@ -1,4 +1,4 @@
-module github.com/fastfading/lumberjack/v2
+module github.com/fastfading/lumberjack
 
 require (
 	github.com/BurntSushi/toml v0.3.1
