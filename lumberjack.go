@@ -37,7 +37,6 @@ import (
 
 const (
 	backupTimeFormat = "20060102"
-	backupTimeFormatDetail = "20060102T150405000"
 	compressSuffix   = ".gz"
 	defaultMaxSize   = 100
 )
@@ -270,8 +269,7 @@ func backupName(name string, local bool) string {
 	}
 
 	timestamp := t.Format(backupTimeFormat)
-	timestampDetal := t.Format(backupTimeFormatDetail)
-	return filepath.Join(dir, fmt.Sprintf("%s%s%s-%s", prefix, timestampDetal, ext, timestamp))
+	return filepath.Join(dir, fmt.Sprintf("%s%s-%s-%s", prefix, ext, timestamp, time.Now()))
 }
 
 // openExistingOrNew opens the logfile if it exists and if the current write
