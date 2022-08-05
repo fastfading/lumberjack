@@ -269,7 +269,7 @@ func backupName(name string, local bool) string {
 	}
 
 	timestamp := t.Format(backupTimeFormat)
-	return filepath.Join(dir, fmt.Sprintf("%s%s-%s-%s", prefix, ext, timestamp, time.Now()))
+	return filepath.Join(dir, fmt.Sprintf("%s%s-%s-%s", prefix, ext, timestamp, time.Now().Unix()))
 }
 
 // openExistingOrNew opens the logfile if it exists and if the current write
