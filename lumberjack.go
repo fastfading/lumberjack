@@ -36,7 +36,7 @@ import (
 )
 
 const (
-	backupTimeFormat = "20060102"
+	backupTimeFormat = "20060102-150405000"
 	compressSuffix   = ".gz"
 	defaultMaxSize   = 100
 )
@@ -269,7 +269,7 @@ func backupName(name string, local bool) string {
 	}
 
 	timestamp := t.Format(backupTimeFormat)
-	return filepath.Join(dir, fmt.Sprintf("%s%s-%s-%d", prefix, ext, timestamp, time.Now().Unix()))
+	return filepath.Join(dir, fmt.Sprintf("%s%s-%s", prefix, ext, timestamp))
 }
 
 // openExistingOrNew opens the logfile if it exists and if the current write
@@ -492,10 +492,11 @@ func (l *Logger) timeFromName(filename, prefix, ext string) (time.Time, error) {
 	if !strings.HasPrefix(filename, prefix) {
 		return time.Time{}, errors.New("mismatched prefix")
 	}
-	if !strings.HasSuffix(filename, ext) {
+	if !strings.Contains(filename, ext) {
 		return time.Time{}, errors.New("mismatched extension")
 	}
-	ts := filename[len(prefix) : len(filename)-len(ext)]
+	logFilePrefix := prefix + ext
+	ts := filename[len(logFilePrefix):]
 	return time.Parse(backupTimeFormat, ts)
 }
 
@@ -516,8 +517,8 @@ func (l *Logger) dir() string {
 // filename.
 func (l *Logger) prefixAndExt() (prefix, ext string) {
 	filename := filepath.Base(l.filename())
-	ext = filepath.Ext(filename)
-	prefix = filename[:len(filename)-len(ext)] + "-"
+	ext = filepath.Ext(filename) + "-"
+	prefix = filename[:len(filename)-len(ext)+1]
 	return prefix, ext
 }
 
