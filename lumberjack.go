@@ -36,7 +36,7 @@ import (
 )
 
 const (
-	backupTimeFormat = "20060102-150405000"
+	backupTimeFormat = "20060102.150405000"
 	compressSuffix   = ".gz"
 	defaultMaxSize   = 100
 )
@@ -492,10 +492,10 @@ func (l *Logger) timeFromName(filename, prefix, ext string) (time.Time, error) {
 	if !strings.HasPrefix(filename, prefix) {
 		return time.Time{}, errors.New("mismatched prefix")
 	}
-	if !strings.Contains(filename, ext) {
-		return time.Time{}, errors.New("mismatched extension")
-	}
 	logFilePrefix := prefix + ext
+	if !strings.HasPrefix(filename, logFilePrefix) {
+		return time.Time{}, errors.New("mismatched logFilePrefix")
+	}
 	ts := filename[len(logFilePrefix):]
 	return time.Parse(backupTimeFormat, ts)
 }
